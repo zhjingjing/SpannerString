@@ -3,14 +3,18 @@ package com.spannerstringdemo;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
@@ -28,6 +32,8 @@ public class MainActivity extends Activity {
     private TextView tv2;
     private TextView tv3;
     private TextView tv4;
+    private TextView tv;
+    private TextView tv5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +50,22 @@ public class MainActivity extends Activity {
         tv2 = (TextView) findViewById(R.id.tv2);
         tv3 = (TextView) findViewById(R.id.tv3);
         tv4 = (TextView) findViewById(R.id.tv4);
+        tv = (TextView) findViewById(R.id.tv);
+        tv5 = (TextView) findViewById(R.id.tv5);
     }
 
 
     private void initData() {
+        SpannableStringBuilder spannableString = new SpannableStringBuilder("会挽雕弓如满月");
+        //start 下标从0开始 end
+//        spannableString.setSpan(new UnderlineSpan(),0,7,Spanned.SPAN_EXCLUSIVE_INCLUSIVE);//前面不包括，后面包括
+//        spannableString.setSpan(new UnderlineSpan(),0,7,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);//前后都不包括
+        spannableString.setSpan(new UnderlineSpan(), 0, 7, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);//包含前面，不包含后面
+//        spannableString.setSpan(new UnderlineSpan(),0,7,Spanned.SPAN_INCLUSIVE_INCLUSIVE);//前后都包括
+        spannableString.insert(0, "诗词歌赋-");
+        spannableString.insert(spannableString.length(), "，西北望，射天狼。");//后面插入
+        tv.setText(spannableString);
+
 
         SpannableString sp1 = new SpannableString("花间一壶酒，独酌无相亲");
         //设置文本背景色
@@ -97,16 +115,18 @@ public class MainActivity extends Activity {
 
 
         //textview设置超链接
-        SpannableString sp4=new SpannableString("百度,打电话,发短信");
-        sp4.setSpan(new URLSpan("https://www.baidu.com"),0,2,Spanned.SPAN_INCLUSIVE_EXCLUSIVE); //打开网页
-        sp4.setSpan(new URLSpan("tel:18337104423"),3,6,Spanned.SPAN_INCLUSIVE_EXCLUSIVE);//打电话
-        sp4.setSpan(new URLSpan("smsto:18337104423"),7,sp4.length(),Spanned.SPAN_INCLUSIVE_EXCLUSIVE);//发短信
+        SpannableString sp4 = new SpannableString("百度,打电话,发短信");
+        sp4.setSpan(new URLSpan("https://www.baidu.com"), 0, 2, Spanned.SPAN_INCLUSIVE_EXCLUSIVE); //打开网页
+        sp4.setSpan(new URLSpan("tel:18337104423"), 3, 6, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);//打电话
+        sp4.setSpan(new URLSpan("smsto:18337104423"), 7, sp4.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);//发短信
         tv4.setText(sp4);
         tv4.setMovementMethod(LinkMovementMethod.getInstance());
 
-
-
-
-
+        //imageSpan
+        SpannableStringBuilder sp5=new SpannableStringBuilder("关关雎鸠，在河之洲洲");
+        Drawable drawable = getResources().getDrawable(R.mipmap.image);
+        drawable.setBounds(0,0,100,100);
+        sp5.setSpan(new ImageSpan(drawable),sp5.length()-1,sp5.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv5.setText(sp5);
     }
 }
